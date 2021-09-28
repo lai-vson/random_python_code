@@ -7,34 +7,41 @@ db = mysql.connector.connect(
 
 mycursor = db.cursor()
 
-print('1. To create new database')
-print('2. To delete database')
-print('3. To list out all database')
+class Database:
+    def __init__(self, dbname):
+        self.dbname = dbname
 
-user_respond = int(input(': '))
-
-
-def user_number():
-    global user_respond
-    if user_respond == 1:
-        dbname = input(f'Database name: ')
+    def db_add(self):
         try:
-            mycursor.execute(f'CREATE DATABASE {dbname}')
+            mycursor.execute(f'CREATE DATABASE {self.dbname}')
             print('Successfully added')
         except:
             print('Error adding database')
-    elif user_respond == 2:
-        dbname = input('Database name: ')
+
+    def db_delete(self):
         try:
-            mycursor.execute(f'DROP DATABASE {dbname}')
+            mycursor.execute(f'DROP DATABASE {self.dbname}')
             print('Successfully delete database')
         except:
             print('Error delete database')
-    elif user_respond == 3:
+
+    def db_list(self):
         mycursor.execute('SHOW DATABASES')
         for list in mycursor:
             print(list[0])
 
-
 if __name__ == '__main__':
-    user_number()
+    print('1. To create new database')
+    print('2. To delete database')
+    print('3. To list out all database')
+    user_respond = int(input(': '))
+
+    if user_respond == 1:
+        mydb = Database(input('Name: '))
+        mydb.db_add()
+    elif user_respond == 2:
+        mydb = Database(input('Name: '))
+        mydb.db_delete()
+    elif user_respond == 3:
+        mydb.db_list()
+
